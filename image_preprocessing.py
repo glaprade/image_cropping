@@ -1,10 +1,10 @@
 from preprocessing import preprocessing
 
 # set parameters
-input_folder = "/Users/genevievelaprade/Documents/thesis macros and scripts/tester copy" # input path
-output_folder = "/Users/genevievelaprade/Documents/thesis macros and scripts/output"
-crop_height = 1024 # desired crop height
-separate_channels = False # separating channels true or false
+input_folder = "/home/glapr/projects/def-cbrown/glapr/ImagePreprocessing/Actin_dataset" # input path
+output_folder = "/home/glapr/projects/def-cbrown/glapr/ImagePreprocessing/Processed_Actin_dataset"
+crop_height = 256 # desired crop height
+separate_channels = True # separating channels true or false
 train_threshold = 0.7 # percentage of training images
 test_threshold = 0.85 # 1 - percentage of testing images
 
