@@ -1,7 +1,5 @@
 import tifffile
 import os
-import shutil
-
 
 class preprocessing:
 
