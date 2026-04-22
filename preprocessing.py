@@ -1,5 +1,7 @@
 import tifffile
+import shutil
 import os
+
 
 class preprocessing:
 
@@ -93,21 +95,21 @@ class preprocessing:
         # for entry in folder
         for entry in entries:
 
-            img = self.load_image(entry.path)
             filename = self.get_label(entry.path) + ".tif"
 
             # if image count is less than the % train threshold
             if count < int(train_threshold * n):
-                # move image to train folder
-                self.save_image(os.path.join(train, filename), img)
+                # copy image to train folder
+                shutil.copy(entry.path, os.path.join(train, entry.name))
+
             # if image count is above the test threshold
             elif count > int(test_threshold * n):
-                # move image to test folder
-                self.save_image(os.path.join(test, filename), img)
+                # copy image to test folder
+                shutil.copy(entry.path, os.path.join(test, entry.name))
             # if image count is between two thresholds
             else:
-                # move image to validation folder
-                self.save_image(os.path.join(valid, filename), img)
+                # copy image to validation folder
+                shutil.copy(entry.path, os.path.join(valid, entry.name))
 
             # increase count
             count +=1
@@ -158,8 +160,6 @@ class preprocessing:
             x = 0 # reset the starting x coordinate value
             y += h # increase the starting y coordinate value
 
-        os.remove(input_path)
-
         return
 
 
@@ -175,11 +175,14 @@ class preprocessing:
         # 2. Crop images inside each split
         for split in [train_folder, test_folder, valid_folder]:
 
-
             for entry in os.scandir(split):
-                if entry.is_file():
+                if entry.is_file() and entry.name.lower().endswith(".tif"):
+
+                    # Crop image → saves only filtered crops
                     self.crop_image(crop_height, entry.path, split)
 
-            if separate_channels == True:
-                self.split_channels(split)
+                    # Remove original (uncropped) image
+                    os.remove(entry.path)
 
+            if separate_channels:
+                self.split_channels(split)
